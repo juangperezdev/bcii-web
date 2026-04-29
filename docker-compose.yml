@@ -31,6 +31,9 @@ services:
     volumes:
       # Esto mapea todos los archivos de WordPress directamente en la carpeta actual (BCII-web)
       - ./:/var/www/html
+      - ./php-conf.ini:/usr/local/etc/php/conf.d/conf.ini
+    extra_hosts:
+      - "localhost:host-gateway"
     networks:
       - wp_net
 
