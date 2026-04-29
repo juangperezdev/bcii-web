@@ -7,10 +7,31 @@
 !wp-content/
 !wp-config-docker.php
 !wp-config-sample.php
+!bin/
+!bin/**
 
-# Within wp-content, ignore everything except themes and plugins (optional)
+# Seed (DB inicial + media de marca, versionados para deploy git → wp-admin import)
+!seed/
+!seed/**
+
+# Backups locales (NO van al repo, .sql.gz pesados)
+backups/
+
+# Within wp-content, ignore everything except themes y assets de marca
 wp-content/*
 !wp-content/themes/
+!wp-content/uploads/
+
+# uploads: solo versionamos los assets de marca BCII (logos + retratos)
+# que el seed.sql.gz referencia. El resto (lo que sube el cliente)
+# vive solo en cada entorno.
+wp-content/uploads/*
+!wp-content/uploads/2026/
+wp-content/uploads/2026/*
+!wp-content/uploads/2026/04/
+wp-content/uploads/2026/04/*
+!wp-content/uploads/2026/04/bcii-*
+!wp-content/uploads/2026/04/leader-*
 
 # Within themes, ignore default themes
 wp-content/themes/*

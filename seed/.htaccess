@@ -1,0 +1,11 @@
+# Bloquea acceso público a /seed/* en el server online.
+# El seed (bcii-seed.sql.gz) viaja en git para deployar el contenido,
+# pero NO debe ser accesible vía HTTP — contendría hashes de passwords
+# y datos privados.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
