@@ -1,0 +1,23 @@
+/* --- Widgets --- */
+.elementor-widget-button.vamtam-mobile-content-align-start .elementor-button-text {
+  text-align: start;
+}
+.elementor-widget-button.vamtam-mobile-content-align-end .elementor-button-text {
+  text-align: end;
+}
+.elementor-widget-button.vamtam-mobile-content-align-center .elementor-button-text {
+  text-align: center;
+}
+.elementor-widget-button.vamtam-mobile-content-align-space-between .elementor-button-text {
+  text-align: justify;
+}
+.elementor-widget-post-comments.vamtam-has-theme-widget-styles #commentform .form-submit {
+  margin: 0 !important;
+}
+.elementor-widget-post-comments.vamtam-has-theme-widget-styles .comments .comment-author {
+  display: none;
+}
+.vamtam-is-wishlist .page-template-default .meta-header-inside {
+  padding: var(--vamtam-content-space-l) 0;
+}
+/*# sourceMappingURL=elementor-small.css.map */

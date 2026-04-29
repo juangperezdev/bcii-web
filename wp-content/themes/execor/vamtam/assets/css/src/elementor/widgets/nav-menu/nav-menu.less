@@ -1,0 +1,52 @@
+// Nav Menu.
+.elementor-widget-nav-menu {
+	// Base Theme Widget Styles.
+	&.vamtam-has-theme-widget-styles {
+		&.vamtam-has-contain-link {
+			li.menu-item {
+				display: flex;
+			}
+			&.elementor-nav-menu__align- {
+				&start {
+					li.menu-item {
+						justify-content: flex-start;
+					}
+				}
+				&end {
+					li.menu-item {
+						justify-content: flex-end;
+					}
+				}
+				&center {
+					li.menu-item {
+						justify-content: center;
+					}
+				}
+				&justify {
+					li.menu-item {
+						justify-content: stretch;
+					}
+				}
+			}
+			a.elementor-item {
+				max-width: fit-content;
+			}
+		}
+
+		&.vamtam-round_menu-links .elementor-nav-menu--dropdown a {
+			border-radius: 20px;
+		}
+
+		ul.elementor-nav-menu--dropdown {
+			a, a:focus, a:hover {
+				border-inline-start: none;
+			}
+		}
+
+		&:not(.vamtam-has-submenu-icon) {
+			.elementor-nav-menu .sub-arrow {
+				display: none;
+			}
+		}
+	}
+}

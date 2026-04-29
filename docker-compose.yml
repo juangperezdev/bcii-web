@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: bcii_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_password
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wp_net
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    container_name: bcii_wordpress
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_password
+      WORDPRESS_DB_NAME: wordpress_db
+    volumes:
+      # Esto mapea todos los archivos de WordPress directamente en la carpeta actual (BCII-web)
+      - ./:/var/www/html
+    networks:
+      - wp_net
+
+volumes:
+  db_data:
+
+networks:
+  wp_net:

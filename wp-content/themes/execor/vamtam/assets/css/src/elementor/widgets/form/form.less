@@ -1,0 +1,118 @@
+// Form.
+.elementor-widget-form {
+	// Base Theme Widget Styles.
+	&.vamtam-has-theme-widget-styles {
+		// links inside form labels to inherit styles from label instead of global kit link selector
+		label a {
+			font: inherit;
+			color: inherit;
+			text-transform: inherit;
+		}
+
+		.flatpickr-mobile {
+			&:is([type=date],[type=time]) {
+				-webkit-appearance: initial;
+			}
+		}
+		input[type="hidden"].elementor-date-field.flatpickr-input,
+		input[type="hidden"].elementor-time-field.flatpickr-input {
+			&[value=""], &:not([value]) {
+				+ .flatpickr-mobile {
+					&:is([type=date],[type=time]) {
+						-webkit-appearance: initial;
+
+						// Placeholder state.
+						&::before {
+							color:rgba(53, 53, 53, .65);
+							content:attr(placeholder);
+						}
+					}
+				}
+			}
+		}
+
+		.elementor-select-wrapper {
+			.select-caret-down-wrapper {
+				font-size: 8px;
+				right: 20px;
+
+				svg {
+					aspect-ratio: 1 / 1.5;
+				}
+
+				+ select {
+					padding-right: 40px;
+			}
+		}
+		}
+
+		&.vamtam-footer-contact-form .elementor-form-fields-wrapper {
+			align-items: start;
+		}
+
+		.elementor-form .elementor-message {
+			padding-top: 1em;
+		}
+
+		// Hover Anim
+		&.vamtam-has-btn-hover-anim {
+			.elementor-button {
+				:is( .vamtam-btn-text, .vamtam-btn-text-abs ) {
+					display: block;
+					transition: transform 1s cubic-bezier(.23,1,.32,1);
+				}
+
+				.vamtam-btn-text-wrap {
+					order: 10;
+					overflow: hidden;
+					position: relative;
+				}
+
+				.vamtam-btn-text {
+					position: relative;
+				}
+
+				.vamtam-btn-text-abs {
+					position: absolute;
+					top: 0;
+					transform: translateY(101%);
+				}
+
+				&:hover {
+					.vamtam-btn-text {
+						transform: translate(0px, -101%);
+					}
+					.vamtam-btn-text-abs {
+						transform: translate(0px, 0%);
+					}
+				}
+			}
+		}
+
+		// Steps progress indicator styles
+		.e-form__indicators {
+			> .e-form__indicators__indicator--state-completed {
+				> [class*="e-form__indicators__indicator"] {
+					border-color: var(--e-global-color-vamtam_accent_2);
+				}
+				+.e-form__indicators__indicator__separator {
+					background-color: var(--e-global-color-vamtam_accent_2);
+				}
+			}
+			> :not(.e-form__indicators__indicator--state-completed) {
+				> [class*="e-form__indicators__indicator"] {
+					border-color: var(--e-global-color-vamtam_accent_4);
+				}
+				+.e-form__indicators__indicator__separator {
+					background-color: var(--e-global-color-vamtam_accent_4);
+				}
+			}
+		}
+
+		// iOS-only
+		:is(body.e--ua-mac, .ios-safari) & input[type=file]::file-selector-button {
+			color: black;
+			border-color: black;
+		}
+	}
+}

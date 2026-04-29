@@ -1,0 +1,106 @@
+// Button.
+.elementor-widget-button {
+	// Base Theme Widget Styles.
+
+	&.vamtam-content-align- {
+		&start {
+			.elementor-button-text {
+				text-align: start;
+			}
+		}
+		&end {
+			.elementor-button-text {
+				text-align: end;
+			}
+		}
+		&center {
+			.elementor-button-text {
+				text-align: center;
+			}
+		}
+		&space-between {
+			.elementor-button-text {
+				text-align: justify;
+			}
+		}
+	}
+
+	&.vamtam-has-theme-widget-styles {
+		// Hover Anim
+		&.vamtam-has-hover-anim {
+			.elementor-button {
+				:is( .vamtam-btn-icon, .vamtam-btn-icon-abs ) {
+					display: block;
+					transition: transform .4s cubic-bezier(.23,1,.32,1);
+				}
+
+				.vamtam-btn-icon-wrap {
+					overflow: hidden;
+					position: relative;
+				}
+
+				.vamtam-btn-icon {
+					position: relative;
+				}
+
+				.vamtam-btn-icon-abs {
+					position: absolute;
+					top: 0;
+					transform: translateY( calc( 100% + 3px ));
+				}
+
+				&:hover {
+					.vamtam-btn-icon {
+						transform: translate(0px, calc( -100% - 3px ) );
+					}
+					.vamtam-btn-icon-abs {
+						transform: translate(0px, 0%);
+					}
+				}
+			}
+		}
+
+		// Theme Icon styles
+		&.vamtam-has-icon-styles {
+			.elementor-button-content-wrapper {
+				align-items: center;
+			}
+
+			.elementor-button-icon {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+
+				:is(i, svg) {
+					display: block;
+				}
+			}
+
+			&.vamtam-has-outside-icon {
+				--vamtam-whitespace: calc( var( --vamtam-gap, 0px ) + var( --vamtam-icon-size, 0px ) + var( --vamtam-icon-padding-ttl, 0px ) + var( --vamtam-icon-border-ttl, 0px ) );
+
+				padding-inline-end: var( --vamtam-whitespace );
+
+				.elementor-button {
+					position: relative;
+				}
+
+				.vamtam-btn-icon-wrap,
+				.elementor-button-content-wrapper > .elementor-button-icon {
+					position: absolute;
+					inset-inline-start: calc( 100% + var( --vamtam-gap, 0px ) );
+				}
+
+				&.vamtam-icon-pos-row {
+					padding-inline-start: var( --vamtam-whitespace );
+
+					.vamtam-btn-icon-wrap,
+					.elementor-button-content-wrapper > .elementor-button-icon {
+						inset-inline-start: auto;
+						inset-inline-end: calc( 100% + var( --vamtam-gap, 0px ) );
+					}
+				}
+			}
+		}
+	}
+}

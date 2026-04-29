@@ -1,0 +1,49 @@
+body.responsive-layout #scroll-to-top {
+  bottom: 20px;
+}
+body.responsive-layout .page-wrapper {
+  flex-direction: column;
+}
+.woocommerce-demo-store .demo_store .woocommerce-store-notice__dismiss-link::before {
+  position: absolute;
+  right: 20px;
+}
+body:not(.elementor-editor-active) .vamtam-sticky-header.vamtam-sticky-header--mobile {
+  position: fixed;
+  left: 0;
+  right: 0;
+  -webkit-backdrop-filter: saturate(180%) blur(40px);
+          backdrop-filter: saturate(180%) blur(40px);
+  top: calc(var(--vamtam-sticky-offset, 0px) + var(--wp-admin--admin-bar--height, 0px));
+  z-index: 100;
+}
+body:not(.elementor-editor-active) .vamtam-sticky-header.vamtam-sticky-header--mobile:is(.vamtam-sticky-header--spacer, .elementor-sticky__spacer) {
+  position: static !important;
+  -webkit-animation: none !important;
+          animation: none !important;
+  transform: none !important;
+  transition: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  will-change: auto !important;
+}
+body:not(.elementor-editor-active) .vamtam-sticky-header:not(.vamtam-sticky-header--mobile):is(.vamtam-sticky-header--spacer, .elementor-sticky__spacer) {
+  display: none;
+}
+#wpadminbar.vamtam-sticky-mobile-header {
+  position: fixed !important;
+}
+/* --- Widgets --- */
+.elementor-widget-button.vamtam-tablet-content-align-start .elementor-button-text {
+  text-align: start;
+}
+.elementor-widget-button.vamtam-tablet-content-align-end .elementor-button-text {
+  text-align: end;
+}
+.elementor-widget-button.vamtam-tablet-content-align-center .elementor-button-text {
+  text-align: center;
+}
+.elementor-widget-button.vamtam-tablet-content-align-space-between .elementor-button-text {
+  text-align: justify;
+}
+/*# sourceMappingURL=elementor-below-max.css.map */

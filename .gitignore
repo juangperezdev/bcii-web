@@ -1,0 +1,24 @@
+# Ignore everything
+/*
+
+# Allow these specific files/directories
+!docker-compose.yml
+!.gitignore
+!wp-content/
+!wp-config-docker.php
+!wp-config-sample.php
+
+# Within wp-content, ignore everything except themes and plugins (optional)
+wp-content/*
+!wp-content/themes/
+
+# Within themes, ignore default themes
+wp-content/themes/*
+!wp-content/themes/execor/
+!wp-content/themes/execor-child/
+
+# Docker/System
+.DS_Store
+db_data/
+node_modules/
+wp-content/themes/execor/samples/instagram-feed.json

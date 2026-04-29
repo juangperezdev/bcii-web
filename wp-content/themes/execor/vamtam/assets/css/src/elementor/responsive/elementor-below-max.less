@@ -1,0 +1,60 @@
+body.responsive-layout {
+
+    #scroll-to-top {
+        bottom: 20px;
+    }
+
+    .page-wrapper {
+        flex-direction: column;
+    }
+}
+
+// WC Store Notice.
+.woocommerce-demo-store {
+	.demo_store {
+		.woocommerce-store-notice__dismiss-link {
+			&::before {
+				position: absolute;
+				right: 20px;
+			}
+		}
+	}
+}
+
+// Vamtam Sticky Header (Mobile).
+body:not(.elementor-editor-active) .vamtam-sticky-header.vamtam-sticky-header--mobile {
+	@top_with_sticky: calc(var(--vamtam-sticky-offset,0px) + var(--wp-admin--admin-bar--height,0px));
+	position: fixed;
+	left: 0;
+	right: 0;
+	backdrop-filter: saturate(180%) blur(40px);
+
+	// TODO: Animating top is not a good idea (performance-wise). Better include this in the transformations.
+	top: @top_with_sticky;
+
+	z-index: 100;
+
+	// Spacer.
+	&:is(.vamtam-sticky-header--spacer, .elementor-sticky__spacer) {
+		position: static !important;
+		animation: none !important;
+		transform: none !important;
+		transition: none !important;
+		visibility: hidden !important;
+		opacity: 0 !important;
+		will-change: auto !important;
+	}
+}
+body:not(.elementor-editor-active) .vamtam-sticky-header:not(.vamtam-sticky-header--mobile) {
+	// Spacer.
+	&:is(.vamtam-sticky-header--spacer, .elementor-sticky__spacer) {
+		display: none;
+	}
+}
+#wpadminbar.vamtam-sticky-mobile-header {
+	position: fixed !important;
+}
+
+/* --- Widgets --- */
+// Glob import all below-max widget styles.
+@import '../../elementor/widgets/**/*.tablet.less';
