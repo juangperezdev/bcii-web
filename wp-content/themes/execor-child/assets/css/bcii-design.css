@@ -27,7 +27,8 @@
   --text-dim:   #6b6b6b;
   --text-muted: #9a9a9a;
   --on-dark:    #f7f6f2;
-  --on-dark-d:  rgba(247,246,242,0.7);
+  --on-dark-d:  rgba(247,246,242,0.82);   /* body/desc sobre fondos dark — sube de 0.7 a 0.82 */
+  --on-dark-bd: rgba(247,246,242,0.18);   /* bordes/dividers en footer */
 
   /* Borders & shadows */
   --border:     rgba(0,0,0,0.08);
@@ -369,6 +370,19 @@ p:last-child { margin-bottom: 0; }
   border-color: var(--brand);
 }
 .btn-outline:hover { background: var(--brand); color: #ffffff; }
+
+/* Modifier — ghost / outline sobre fondos oscuros (bg-dark). Borde y texto
+   con contraste alto, hover invierte. */
+.btn-on-dark {
+  color: var(--on-dark);
+  background: transparent;
+  border-color: rgba(247,246,242,0.55);
+}
+.btn-on-dark:hover {
+  background: var(--on-dark);
+  color: var(--ink);
+  border-color: var(--on-dark);
+}
 
 .btn-link {
   color: var(--brand);
@@ -992,9 +1006,9 @@ footer.bcii-footer .container { color: var(--on-dark); }
   text-transform: uppercase;
 }
 .footer-desc {
-  font-size: 0.9rem;
-  color: var(--on-dark-d);
-  line-height: 1.7;
+  font-size: 0.92rem;
+  color: var(--on-dark);                     /* full opacity */
+  line-height: 1.75;
   margin-bottom: 1.1rem;
   max-width: 420px;
 }
@@ -1017,25 +1031,27 @@ footer.bcii-footer .container { color: var(--on-dark); }
   animation: pulseBrand 2.5s infinite;
 }
 .footer-col-head {
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   color: var(--accent);
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
 }
 .footer-links { list-style: none; padding: 0; }
-.footer-links li { margin-bottom: 0.55rem; }
+.footer-links li { margin-bottom: 0.7rem; }
 .footer-links a {
-  font-size: 0.92rem;
-  color: var(--on-dark-d);
+  font-size: 0.98rem;
+  font-weight: 500;                          /* sube de 400 → 500 para que no se vea fino */
+  color: var(--on-dark);
   text-decoration: none;
   transition: color 0.18s;
+  letter-spacing: 0.005em;
 }
 .footer-links a:hover { color: var(--accent); }
 .footer-bottom {
   padding-top: 1.75rem;
-  border-top: 1px solid rgba(247,246,242,0.12);
+  border-top: 1px solid var(--on-dark-bd);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -1043,15 +1059,16 @@ footer.bcii-footer .container { color: var(--on-dark); }
   gap: 1.25rem;
 }
 .footer-copyright {
-  font-size: 0.82rem;
-  color: var(--on-dark-d);
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--on-dark);                     /* full opacity */
 }
 .footer-disclaimer {
-  font-size: 0.78rem;
-  color: var(--on-dark-d);
-  line-height: 1.7;
+  font-size: 0.82rem;
+  color: var(--on-dark);                     /* full opacity */
+  line-height: 1.78;
   max-width: 760px;
-  border-top: 1px solid rgba(247,246,242,0.12);
+  border-top: 1px solid var(--on-dark-bd);
   padding-top: 1.5rem;
   margin-top: 1.5rem;
 }
@@ -1154,3 +1171,45 @@ footer.bcii-footer .container { color: var(--on-dark); }
   h1 { font-size: 2.2rem; }
   h2 { font-size: 1.6rem; }
 }
+
+/* ============================================================
+   OVERRIDES — Elementor Default Kit
+   El Kit (post #6) inyecta `.elementor-kit-6 a { color: ... }`
+   con specificity (0,0,1,1) que pisa nuestros selectores de un
+   solo .class. Re-scope todo bajo body.bcii para subir specificity
+   a (0,0,2,1)+ y ganar sin necesidad de !important.
+   ============================================================ */
+
+/* Botones — color de texto */
+body.bcii .btn.btn-ink     { color: #ffffff; }
+body.bcii .btn.btn-brand   { color: #ffffff; }
+body.bcii .btn.btn-accent  { color: var(--accent-ink); }
+body.bcii .btn.btn-on-dark { color: var(--on-dark); }
+body.bcii .btn.btn-on-dark:hover { color: var(--ink); }
+body.bcii .btn.btn-outline { color: var(--brand); }
+body.bcii .btn.btn-outline:hover { color: #ffffff; }
+body.bcii .btn.btn-ghost   { color: var(--text); }
+body.bcii .btn.btn-ghost:hover { color: var(--ink); }
+body.bcii .btn.btn-link    { color: var(--brand); }
+
+/* Nav */
+body.bcii .bcii-nav .nav-links li a { color: var(--text); }
+body.bcii .bcii-nav .nav-links li a:hover,
+body.bcii .bcii-nav .nav-links li a.active { color: var(--brand); }
+body.bcii .bcii-nav a.nav-ir { color: #ffffff; }
+body.bcii .bcii-nav a.nav-ir:hover { color: #ffffff; }
+
+/* Footer — links + brand text */
+body.bcii .bcii-footer .footer-links a { color: var(--on-dark); }
+body.bcii .bcii-footer .footer-links a:hover { color: var(--accent); }
+body.bcii .bcii-footer a.footer-logo { color: var(--on-dark); }
+body.bcii .bcii-footer a.footer-logo:hover { color: var(--on-dark); }
+
+/* News card — el card entero es <a> en algunas vistas */
+body.bcii a.news-card { color: inherit; }
+body.bcii a.news-card .news-title { color: var(--ink); }
+
+/* Contact card values */
+body.bcii .contact-card .contact-val a { color: var(--brand); }
+body.bcii .contact-card .contact-val a:hover { color: var(--brand-h); }
+
