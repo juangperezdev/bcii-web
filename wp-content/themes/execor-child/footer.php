@@ -13,6 +13,17 @@ $year           = date( 'Y' );
 
 <footer class="bcii-footer">
     <div class="container">
+        <div class="footer-cta">
+            <div class="footer-cta-text">
+                <h3>Ready to dive deeper into the <em>BCII opportunity</em>?</h3>
+                <p>Read the full investment thesis or contact our investor relations team.</p>
+            </div>
+            <div class="footer-cta-actions">
+                <a href="<?php echo esc_url( home_url( '/investment/' ) ); ?>" class="btn btn-accent">Investment Thesis</a>
+                <a href="<?php echo esc_url( home_url( '/investor-relations/' ) ); ?>" class="btn btn-on-dark">Contact IR</a>
+            </div>
+        </div>
+
         <div class="footer-grid">
             <div>
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="footer-logo">

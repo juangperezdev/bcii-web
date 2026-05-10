@@ -10,8 +10,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TS="$(date +%Y%m%d-%H%M%S)"
 
-# IDs de assets BCII a preservar
-KEEP_ATTACHMENTS=(9999 10000 10001 10002 10003 10004 10005 10006)
+# IDs de assets BCII a preservar (logos, retratos leadership, ilustraciones Unsplash)
+KEEP_ATTACHMENTS=(9999 10000 10001 10002 10003 10004 10005 10006 10051 10052 10053 10054 10055 10056)
 # Elementor Default Kit
 KEEP_ELEMENTOR_LIBRARY=(5 6)
 

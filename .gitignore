@@ -32,6 +32,10 @@ wp-content/uploads/2026/*
 wp-content/uploads/2026/04/*
 !wp-content/uploads/2026/04/bcii-*
 !wp-content/uploads/2026/04/leader-*
+!wp-content/uploads/2026/05/
+wp-content/uploads/2026/05/*
+!wp-content/uploads/2026/05/bcii-*
+!wp-content/uploads/2026/05/leader-*
 
 # Within themes, ignore default themes
 wp-content/themes/*

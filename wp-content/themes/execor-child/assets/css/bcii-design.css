@@ -8,18 +8,20 @@
 
 /* ── Custom Properties ── */
 :root {
-  /* Surfaces */
-  --bg:         #f7f6f2;   /* tan claro - fondo principal */
-  --bg-alt:     #f5eee4;   /* taupe - bloques de contraste */
+  /* Surfaces — disciplina cromática Evernote-style: blanco dominante, gris muy suave para ritmo */
+  --bg:         #ffffff;   /* blanco puro - fondo principal */
+  --bg-alt:     #f8f9fa;   /* gris muy claro - bloques de contraste alternados */
   --bg-card:    #ffffff;   /* card blanco */
+  --bg-warm:    #f5eee4;   /* tan cálido - sólo para hero / accent puntual */
   --bg-dark:    #1d4d40;   /* teal oscuro - footer / dark sections */
 
   /* Brand & accents */
   --brand:      #1d4d40;   /* teal del logo */
   --brand-h:    #143630;
-  --accent:     #dcf7c4;   /* verde claro Joe */
+  --accent:     #dcf7c4;   /* verde claro Joe - sólo en botones/badges */
   --accent-h:   #c8eda6;   /* hover */
   --accent-ink: #2f5d20;   /* verde oscuro para texto sobre accent */
+  --gold:       #c79a3a;   /* dorado de énfasis - CTA secundario / stats */
 
   /* Inks */
   --ink:        #0a0a0a;   /* CTA negro Evernote */
@@ -56,11 +58,12 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--body);
-  font-size: 16px;
-  line-height: 1.65;
+  font-size: 17px;                     /* sube de 16 → 17 para lectura más cómoda */
+  line-height: 1.75;                   /* respiración Evernote — sube de 1.65 */
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* ── Navigation ── */
@@ -159,19 +162,20 @@ nav.bcii-nav {
 }
 .nav-ir:hover { background: #1f1f1f; transform: translateY(-1px); }
 
-/* Ticker badge */
+/* Ticker badge — discreto, secundario al CTA */
 .nav-ticker {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 500;
-  color: var(--brand);
+  color: var(--text-dim);
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.32rem 0.7rem;
+  padding: 0.28rem 0.6rem;
   border-radius: 999px;
-  background: var(--accent);
+  background: transparent;
+  border: 1px solid var(--border);
   white-space: nowrap;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 .nav-ticker-dot {
   width: 6px; height: 6px;
@@ -180,6 +184,7 @@ nav.bcii-nav {
   flex-shrink: 0;
   animation: pulseBrand 2.5s ease-in-out infinite;
 }
+@media (max-width: 1100px) { .nav-ticker { display: none; } }
 
 /* Mobile toggle */
 .nav-toggle {
@@ -212,14 +217,19 @@ nav.bcii-nav {
 
 /* ── Sections ── */
 section {
-  padding: 8rem 0;
+  padding: 7rem 0;
   position: relative;
 }
 section.bg-alt   { background: var(--bg-alt); }
+section.bg-warm  { background: var(--bg-warm); }
 section.bg-white { background: var(--bg-card); }
 section.bg-dark  { background: var(--bg-dark); color: var(--on-dark); }
 section.bg-dark h1, section.bg-dark h2, section.bg-dark h3 { color: var(--on-dark); }
 section.bg-dark p { color: var(--on-dark-d); }
+section.bg-dark h2 em { color: var(--accent); }
+
+/* Ritmo zigzag: alterna automáticamente blanco / gris claro cuando se aplica .bcii-rhythm al contenedor padre */
+.bcii-rhythm > section:nth-of-type(even) { background: var(--bg-alt); }
 
 /* ── Section Labels ── */
 .label-row {
@@ -258,29 +268,35 @@ section.bg-dark p { color: var(--on-dark-d); }
   color: var(--text-dim);
 }
 
-/* ── Typography ── */
+/* ── Typography (escala Evernote: H1 56-64, H2 36-42, body 17-18) ── */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--sans);
-  line-height: 1.15;
+  line-height: 1.18;
   font-weight: 700;
   color: var(--ink);
 }
 h1 {
-  font-size: clamp(2.4rem, 5.5vw, 4.8rem);
+  font-size: clamp(2.6rem, 5vw, 4rem);     /* ~42-64px — escala estricta */
   font-weight: 700;
-  letter-spacing: -0.025em;
-  margin-bottom: 1.25rem;
+  letter-spacing: -0.028em;
+  margin-bottom: 1.5rem;
 }
 h2 {
-  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
-  letter-spacing: -0.02em;
+  font-size: clamp(2rem, 3vw, 2.625rem);   /* ~32-42px */
+  letter-spacing: -0.022em;
   margin-bottom: 1.25rem;
 }
-h2 em { font-style: normal; color: var(--brand); }
-h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.65rem;
+/* Cursiva sólo en énfasis con <em> dentro de titulares — palabra clave en brand */
+h1 em, h2 em {
+  font-style: italic;
   font-weight: 600;
+  color: var(--brand);
+}
+h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
 }
 h4 {
   font-size: 0.78rem;
@@ -300,15 +316,17 @@ h4 {
 
 p {
   color: var(--text);
-  line-height: 1.7;
-  margin-bottom: 1rem;
+  line-height: 1.78;                  /* respiración Evernote */
+  margin-bottom: 1.1rem;
+  font-size: 1rem;                    /* hereda 17px del body */
 }
 p:last-child { margin-bottom: 0; }
 
 .lead {
-  font-size: 1.1rem;
+  font-size: 1.18rem;                 /* ~20px — subtítulo dominante */
   color: var(--text-dim);
   line-height: 1.7;
+  font-weight: 400;
 }
 
 .text-dim   { color: var(--text-dim); }
@@ -321,16 +339,19 @@ p:last-child { margin-bottom: 0; }
   align-items: center;
   gap: 0.45rem;
   font-family: var(--sans);
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0;
   text-decoration: none;
   cursor: pointer;
   border: 1px solid transparent;
-  padding: 0.78rem 1.5rem;
+  padding: 0.85rem 1.6rem;
   border-radius: var(--radius-sm);
-  transition: all 0.18s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.18s ease, box-shadow 0.25s ease;
 }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.10); }
+.btn:active { transform: translateY(0); box-shadow: var(--shadow-sm); }
+.btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
 
 /* Negro sólido — primario al estilo Evernote */
 .btn-ink {
@@ -450,26 +471,67 @@ p:last-child { margin-bottom: 0; }
 /* ── Stats ── */
 .stat-num {
   font-family: var(--sans);
-  font-size: clamp(2rem, 3.6vw, 3.2rem);
+  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
   font-weight: 700;
   color: var(--ink);
   line-height: 1;
   letter-spacing: -0.03em;
 }
 .stat-lbl {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   color: var(--text-dim);
   text-transform: uppercase;
-  margin-top: 0.55rem;
+  margin-top: 0.65rem;
 }
 .stat-desc {
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   color: var(--text-dim);
-  margin-top: 0.5rem;
-  line-height: 1.55;
+  margin-top: 0.65rem;
+  line-height: 1.65;
 }
+
+/* Stats grid — variante card con icono superior y gradiente sutil */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+.stat-card {
+  background: linear-gradient(160deg, var(--bg-card) 0%, var(--bg-alt) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.85rem;
+  text-align: left;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-2);
+}
+.stat-card .stat-icon {
+  width: 44px; height: 44px;
+  background: var(--accent);
+  color: var(--brand);
+  border-radius: 42% 58% 60% 40% / 50% 45% 55% 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.stat-card .stat-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.stat-card .stat-num { font-size: clamp(2.4rem, 4vw, 3.2rem); }
+section.bg-dark .stat-card {
+  background: linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  border-color: var(--on-dark-bd);
+}
+section.bg-dark .stat-card .stat-num { color: var(--on-dark); }
+section.bg-dark .stat-card .stat-lbl { color: var(--accent); }
+section.bg-dark .stat-card .stat-desc { color: var(--on-dark-d); }
 
 /* ── Data Tables ── */
 .data-table-wrap {
@@ -812,15 +874,69 @@ blockquote p, .callout p {
 
 /* ── Hero (homepage) ── */
 .bcii-hero {
-  background: var(--bg-alt);
+  background: var(--bg-warm);
   padding: calc(var(--nav-h) + 7rem) 0 7rem;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
+/* Blobs decorativos de fondo (estilo Evernote) */
+.bcii-hero::before,
+.bcii-hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+.bcii-hero::before {
+  width: 520px; height: 520px;
+  background: var(--accent);
+  top: -180px; left: -120px;
+}
+.bcii-hero::after {
+  width: 420px; height: 420px;
+  background: rgba(29,77,64,0.18);
+  bottom: -160px; right: -80px;
+}
+.bcii-hero > .container { position: relative; z-index: 1; }
 .bcii-hero h1 { max-width: 14ch; margin-left: auto; margin-right: auto; }
 .bcii-hero .lead { max-width: 640px; margin: 0 auto 2rem; }
 .bcii-hero .btns { justify-content: center; margin-bottom: 3rem; }
+
+/* Hero con imagen — variante moderna full-bleed */
+.bcii-hero.has-image { padding: calc(var(--nav-h) + 5rem) 0 5rem; }
+.bcii-hero-media {
+  margin: 3rem auto 0;
+  max-width: 980px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  z-index: 1;
+}
+.bcii-hero-media img,
+.bcii-hero-media picture { display: block; width: 100%; height: auto; }
+
+/* ── Page illustration band (debajo del page-hero en páginas internas) ── */
+.bcii-page-illustration {
+  padding: 4rem 0 1rem;
+  background: var(--bg);
+}
+.bcii-page-illustration .bcii-hero-media {
+  margin-top: 0;
+  max-width: 1080px;
+  aspect-ratio: 16 / 7;
+}
+.bcii-page-illustration .bcii-hero-media img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+@media (max-width: 700px) {
+  .bcii-page-illustration { padding: 2.5rem 0 0.5rem; }
+  .bcii-page-illustration .bcii-hero-media { aspect-ratio: 4 / 3; }
+}
 
 .hero-tag {
   display: inline-block;
@@ -932,24 +1048,37 @@ blockquote p, .callout p {
   flex-shrink: 0;
 }
 
-/* ── Value props icons ── */
+/* ── Value props icons (estilo Evernote: blob orgánico detrás del símbolo) ── */
 .vp-icon {
-  width: 48px; height: 48px;
+  width: 64px; height: 64px;
   background: var(--accent);
   color: var(--brand);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-  border-radius: var(--radius-sm);
+  margin-bottom: 1.25rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  border-radius: 42% 58% 60% 40% / 50% 45% 55% 50%;   /* blob orgánico */
+  position: relative;
+  transition: transform 0.4s ease, border-radius 0.6s ease;
 }
+.panel:hover .vp-icon,
+.vp-icon:hover {
+  transform: rotate(-4deg) scale(1.04);
+  border-radius: 60% 40% 42% 58% / 45% 55% 45% 55%;
+}
+.vp-icon svg { width: 28px; height: 28px; display: block; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.vp-icon.is-warm { background: #fbe8c4; color: #8a5b14; }
+.vp-icon.is-cool { background: #d6ecff; color: #1f4d7a; }
+.vp-icon.is-mint { background: var(--accent); color: var(--brand); }
 .vp-title {
   font-family: var(--sans);
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--ink);
   margin-bottom: 0.5rem;
+  letter-spacing: -0.005em;
 }
 
 /* ── Animations ── */
@@ -966,6 +1095,63 @@ blockquote p, .callout p {
 .animate-up-d2 { animation: fadeUp 0.7s 0.16s ease-out both; }
 .animate-up-d3 { animation: fadeUp 0.7s 0.24s ease-out both; }
 .animate-up-d4 { animation: fadeUp 0.7s 0.32s ease-out both; }
+
+/* Reveal on scroll (IntersectionObserver toggle vía JS — bcii-nav.js) */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  will-change: opacity, transform;
+}
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+.reveal[data-delay="1"] { transition-delay: 0.08s; }
+.reveal[data-delay="2"] { transition-delay: 0.16s; }
+.reveal[data-delay="3"] { transition-delay: 0.24s; }
+.reveal[data-delay="4"] { transition-delay: 0.32s; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* Auto-reveal — aplicar fade-in a tarjetas cuando el JS marca .bcii-rhythm */
+body.bcii-rhythm-on .panel,
+body.bcii-rhythm-on .news-card,
+body.bcii-rhythm-on .leader-card,
+body.bcii-rhythm-on .stat-card,
+body.bcii-rhythm-on .step-card { transition: opacity 0.6s ease-out, transform 0.6s ease-out, border-color 0.25s, box-shadow 0.25s; }
+
+/* ── Layout: zigzag (texto + imagen alternando) ── */
+.zigzag {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.zigzag.is-reverse > .zigzag-text { order: 2; }
+.zigzag-text > h2 { margin-top: 0; }
+.zigzag-media {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-alt);
+  position: relative;
+}
+.zigzag-media img,
+.zigzag-media picture { display: block; width: 100%; height: auto; border-radius: var(--radius-lg); }
+.zigzag-media.has-blob::before {
+  content: '';
+  position: absolute;
+  inset: -8% -6% auto auto;
+  width: 60%; aspect-ratio: 1;
+  background: var(--accent);
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.45;
+  z-index: -1;
+  pointer-events: none;
+}
+@media (max-width: 900px) {
+  .zigzag { grid-template-columns: 1fr; gap: 2.5rem; }
+  .zigzag.is-reverse > .zigzag-text { order: initial; }
+}
 
 /* ── Footer ── */
 footer.bcii-footer {
@@ -1064,15 +1250,52 @@ footer.bcii-footer .container { color: var(--on-dark); }
   color: var(--on-dark);                     /* full opacity */
 }
 .footer-disclaimer {
-  font-size: 0.82rem;
-  color: var(--on-dark);                     /* full opacity */
-  line-height: 1.78;
-  max-width: 760px;
+  font-size: 0.68rem;                          /* ~10-11px estilo financiero */
+  color: var(--on-dark-d);                     /* desaturado */
+  line-height: 1.65;
+  max-width: 920px;
   border-top: 1px solid var(--on-dark-bd);
-  padding-top: 1.5rem;
+  padding-top: 1.25rem;
   margin-top: 1.5rem;
+  letter-spacing: 0.005em;
 }
-.footer-disclaimer strong { color: var(--accent); font-weight: 600; }
+.footer-disclaimer strong { color: var(--accent); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.72rem; }
+
+/* ── Footer CTA hero (banda anterior a las columnas) ── */
+.footer-cta {
+  background: linear-gradient(135deg, var(--brand) 0%, #2a6e5d 100%);
+  color: var(--on-dark);
+  padding: 3rem 2.5rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: -2rem auto 3.5rem;
+  max-width: 1120px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.footer-cta::after {
+  content: '';
+  position: absolute;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: rgba(220,247,196,0.18);
+  filter: blur(30px);
+  top: -60px; right: -60px;
+  pointer-events: none;
+}
+.footer-cta-text { flex: 1 1 360px; position: relative; z-index: 1; }
+.footer-cta-text h3 { color: var(--on-dark); font-size: 1.6rem; line-height: 1.25; margin-bottom: 0.4rem; }
+.footer-cta-text p  { color: var(--on-dark-d); margin: 0; font-size: 0.98rem; }
+.footer-cta-actions { display: flex; gap: 0.85rem; flex-wrap: wrap; position: relative; z-index: 1; }
+@media (max-width: 700px) {
+  .footer-cta { padding: 2.2rem 1.5rem; margin: -1.5rem 1rem 2.5rem; }
+  .footer-cta-text h3 { font-size: 1.3rem; }
+}
 
 /* ── Person card (person-card / -avatar / -role / -name) ── */
 .person-card {
