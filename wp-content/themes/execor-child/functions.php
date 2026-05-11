@@ -34,7 +34,7 @@ function execor_child_enqueue_styles() {
     // Google Fonts: Inter (única familia, según briefing Joe Salvani)
     wp_enqueue_style(
         'bcii-google-fonts',
-        'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
+        'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap',
         array(),
         null
     );

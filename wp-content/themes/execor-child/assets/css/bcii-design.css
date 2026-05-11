@@ -316,40 +316,46 @@ section.bg-dark h2 em { color: var(--accent); }
   color: var(--text-dim);
 }
 
-/* ── Typography (escala Evernote: H1 56-64, H2 36-42, body 17-18) ── */
+/* ── Typography (escala Evernote: H1 56-64, H2 36-42, body 17-18)
+ *   Headlines en Inter ExtraBold/Black, sin cursivas ni subrayados.
+ *   El <em> dentro de heading hereda el mismo peso/estilo — solo cambia color
+ *   para mantener el énfasis sin tipografía itálica. */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--sans);
-  line-height: 1.18;
-  font-weight: 700;
+  line-height: 1.08;
+  font-weight: 800;
   color: var(--ink);
+  font-style: normal;
+  text-decoration: none;
 }
 h1 {
   font-size: clamp(2.6rem, 5vw, 4rem);     /* ~42-64px — escala estricta */
-  font-weight: 700;
-  letter-spacing: -0.028em;
+  font-weight: 800;
+  letter-spacing: -0.032em;
   margin-bottom: 1.5rem;
 }
 h2 {
   font-size: clamp(2rem, 3vw, 2.625rem);   /* ~32-42px */
-  letter-spacing: -0.022em;
+  font-weight: 800;
+  letter-spacing: -0.028em;
   margin-bottom: 1.25rem;
 }
-/* Cursiva sólo en énfasis con <em> dentro de titulares — palabra clave en brand */
-h1 em, h2 em {
-  font-style: italic;
-  font-weight: 600;
+/* Énfasis con <em> dentro de heading — sin italic, mismo peso, color brand */
+h1 em, h2 em, h3 em, h4 em, h5 em, h6 em {
+  font-style: normal;
+  font-weight: inherit;
   color: var(--brand);
 }
 h3 {
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
-  font-weight: 600;
-  letter-spacing: -0.005em;
+  font-weight: 800;
+  letter-spacing: -0.012em;
 }
 h4 {
   font-size: 0.78rem;
   color: var(--brand);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
@@ -1487,6 +1493,13 @@ footer.bcii-footer {
   position: relative;
 }
 footer.bcii-footer .container { color: var(--on-dark); }
+/* Defensa global: ningún elemento del footer en cursiva o subrayado */
+footer.bcii-footer em,
+footer.bcii-footer i,
+footer.bcii-footer u { font-style: normal; text-decoration: none; color: inherit; }
+footer.bcii-footer a { text-decoration: none; }
+/* El CTA tiene gradiente teal de fondo — el énfasis va en accent verde claro */
+.footer-cta em { color: var(--accent); }
 .footer-grid {
   display: grid;
   grid-template-columns: 1.8fr 1fr 1fr 1fr;
@@ -1504,10 +1517,11 @@ footer.bcii-footer .container { color: var(--on-dark); }
 .footer-brand-text .name {
   display: block;
   font-family: var(--sans);
-  font-weight: 700;
+  font-weight: 800;
+  font-style: normal;
   font-size: 1.15rem;
   color: var(--on-dark);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   line-height: 1;
 }
 .footer-brand-text .sub {
@@ -1544,9 +1558,10 @@ footer.bcii-footer .container { color: var(--on-dark); }
   animation: pulseBrand 2.5s infinite;
 }
 .footer-col-head {
-  font-size: 0.76rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-size: 0.82rem;
+  font-weight: 800;
+  font-style: normal;
+  letter-spacing: 0.14em;
   color: var(--accent);
   text-transform: uppercase;
   margin-bottom: 1.1rem;
@@ -1555,9 +1570,10 @@ footer.bcii-footer .container { color: var(--on-dark); }
 .footer-links li { margin-bottom: 0.7rem; }
 .footer-links a {
   font-size: 0.98rem;
-  font-weight: 500;                          /* sube de 400 → 500 para que no se vea fino */
+  font-weight: 400;                          /* peso body — el resto del footer es bold */
   color: var(--on-dark);
   text-decoration: none;
+  font-style: normal;
   transition: color 0.18s;
   letter-spacing: 0.005em;
 }
@@ -1616,7 +1632,7 @@ footer.bcii-footer .container { color: var(--on-dark); }
   pointer-events: none;
 }
 .footer-cta-text { flex: 1 1 360px; position: relative; z-index: 1; }
-.footer-cta-text h3 { color: var(--on-dark); font-size: 1.6rem; line-height: 1.25; margin-bottom: 0.4rem; }
+.footer-cta-text h3 { color: var(--on-dark); font-size: 1.6rem; font-weight: 800; line-height: 1.15; letter-spacing: -0.018em; margin-bottom: 0.4rem; }
 .footer-cta-text p  { color: var(--on-dark-d); margin: 0; font-size: 0.98rem; }
 .footer-cta-actions { display: flex; gap: 0.85rem; flex-wrap: wrap; position: relative; z-index: 1; }
 @media (max-width: 700px) {
@@ -1781,6 +1797,29 @@ body.bcii .bcii-footer .footer-links a { color: var(--on-dark); }
 body.bcii .bcii-footer .footer-links a:hover { color: var(--accent); }
 body.bcii .bcii-footer a.footer-logo { color: var(--on-dark); }
 body.bcii .bcii-footer a.footer-logo:hover { color: var(--on-dark); }
+
+/* Headings — el Elementor Kit aplica `.elementor-kit-6 hN { color, font-family,
+ * font-size, font-weight, line-height }` con specificity (0,0,1,1) y carga
+ * DESPUÉS de este CSS, ganando por orden. Re-scope bajo body.bcii (0,0,1,2)
+ * para que nuestra tipografía Inter ExtraBold gane site-wide. */
+body.bcii h1, body.bcii h2, body.bcii h3,
+body.bcii h4, body.bcii h5, body.bcii h6 {
+  font-family: var(--sans);
+  color: var(--ink);
+  font-weight: 800;
+  font-style: normal;
+  line-height: 1.08;
+}
+body.bcii h1 { font-size: clamp(2.6rem, 5vw, 4rem);     letter-spacing: -0.032em; }
+body.bcii h2 { font-size: clamp(2rem, 3vw, 2.625rem);   letter-spacing: -0.028em; }
+body.bcii h3 { font-size: 1.25rem;                       letter-spacing: -0.012em; }
+body.bcii h4 { font-size: 0.78rem; color: var(--brand); font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
+/* Contextos especiales: footer + dark sections necesitan color claro */
+body.bcii .footer-cta-text h3 { color: var(--on-dark); font-size: 1.6rem; line-height: 1.15; letter-spacing: -0.018em; }
+body.bcii .bcii-footer h1, body.bcii .bcii-footer h2,
+body.bcii .bcii-footer h3, body.bcii .bcii-footer h4 { color: var(--on-dark); }
+body.bcii section.bg-dark h1, body.bcii section.bg-dark h2,
+body.bcii section.bg-dark h3, body.bcii section.bg-dark h4 { color: var(--on-dark); }
 
 /* News card — el card entero es <a> en algunas vistas */
 body.bcii a.news-card { color: inherit; }
