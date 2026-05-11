@@ -10,9 +10,9 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-$logo_id     = 10001; // bcii-logo-teal
+$logo_id     = 10150; // bcii-logo-teal-Photoroom (PNG con transparencia)
 $logo_url    = wp_get_attachment_image_url( $logo_id, 'full' );
-$ir_url      = home_url( '/investor-relations/' );
+$thesis_url  = home_url( '/investment/' );
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -43,16 +43,11 @@ $ir_url      = home_url( '/investor-relations/' );
             'menu_class'     => 'nav-links',
             'menu_id'        => 'navLinks',
             'fallback_cb'    => false,
-            'depth'          => 1,
+            'depth'          => 2,
         ) );
         ?>
 
-        <span class="nav-ticker" aria-label="OTC Pink ticker BCII">
-            <span class="nav-ticker-dot"></span>
-            OTC PINK: BCII
-        </span>
-
-        <a href="<?php echo esc_url( $ir_url ); ?>" class="nav-ir">Investor Relations</a>
+        <a href="<?php echo esc_url( $thesis_url ); ?>" class="nav-cta">Investment Thesis</a>
 
         <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">☰</button>
     </div>

@@ -1,13 +1,14 @@
 <?php
 /**
  * BCII — Child theme footer
+ *
+ * Logo: SVG inline (no JPEG con fondo blanco que se corta feo sobre el bg
+ * oscuro del footer). currentColor permite recolorearlo desde CSS.
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-$logo_white_id  = 10002; // bcii-logo-white
-$logo_white_url = wp_get_attachment_image_url( $logo_white_id, 'full' );
-$year           = date( 'Y' );
+$year = date( 'Y' );
 ?>
 </main><!-- /.bcii-main -->
 
@@ -26,13 +27,10 @@ $year           = date( 'Y' );
 
         <div class="footer-grid">
             <div>
-                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="footer-logo">
-                    <?php if ( $logo_white_url ) : ?>
-                        <img src="<?php echo esc_url( $logo_white_url ); ?>" alt="BCII Enterprises">
-                    <?php endif; ?>
+                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="footer-logo" aria-label="BCII Enterprises">
                     <span class="footer-brand-text">
-                        <span class="name">ENTERPRISES</span>
-                        <span class="sub">INC.</span>
+                        <span class="name">BCII</span>
+                        <span class="sub">Enterprises Inc.</span>
                     </span>
                 </a>
                 <p class="footer-desc">A blockchain-focused financial technology company headquartered in Vero Beach, Florida. Developing the patent-pending Super Coupon Token platform to transform distribution-list assets into tradeable digital instruments.</p>

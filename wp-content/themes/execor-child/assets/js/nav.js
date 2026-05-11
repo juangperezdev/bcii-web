@@ -1,6 +1,7 @@
 /**
  * BCII — Nav + scroll reveal
  *  - Mobile nav toggle (.open en #navLinks)
+ *  - Dropdown parents: <a href="#"> no navega — solo abre el sub-menu en mobile.
  *  - Auto-reveal: aplica .reveal a tarjetas / panels y togglea .is-visible
  *    al entrar en viewport (IntersectionObserver). Respetando prefers-reduced-motion.
  */
@@ -19,7 +20,15 @@
 
     menu.addEventListener('click', function (e) {
       var a = e.target.closest('a');
-      if (a && menu.classList.contains('open')) {
+      if (!a) return;
+      /* Parents de dropdown (href="#") no navegan — solo evita el jump-to-top.
+       * En mobile el sub-menu ya está expandido (CSS); en desktop el hover
+       * lo abre, este click no hace nada. */
+      if (a.getAttribute('href') === '#') {
+        e.preventDefault();
+        return;
+      }
+      if (menu.classList.contains('open')) {
         menu.classList.remove('open');
         btn.setAttribute('aria-expanded', 'false');
       }

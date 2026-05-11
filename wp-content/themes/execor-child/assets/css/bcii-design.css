@@ -53,6 +53,10 @@
 
 html { scroll-behavior: smooth; }
 
+/* Scroll-to-top widget de Vamtam — su CSS/JS está dequeueado en functions.php,
+ * sin estilos queda como texto plano "top" en el footer. Lo ocultamos. */
+#scroll-to-top { display: none !important; }
+
 body.bcii,
 body {
   background: var(--bg);
@@ -65,6 +69,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
+
+/* El nav es position: fixed con backdrop-blur translúcido — el contenido
+   pasa por debajo. El home arranca con la imagen banner edge-to-edge a y=0
+   (queda preciosa atrás del nav transparente, estilo Apple). Las páginas
+   internas que arrancan con texto compensan ellas mismas via .page-hero. */
 
 /* ── Navigation ── */
 nav.bcii-nav {
@@ -147,44 +156,83 @@ nav.bcii-nav {
   background: var(--accent);
 }
 
-/* Nav CTA: botón negro sólido al estilo Evernote */
-.nav-ir {
+/* Nav CTA principal — color de marca, prominente.
+   Reemplaza al ex .nav-ir (negro) que ahora vive en el dropdown Investors. */
+.nav-cta {
   font-size: 0.86rem;
   font-weight: 600;
   color: #ffffff;
-  background: var(--ink);
-  padding: 0.6rem 1.15rem;
+  background: var(--brand);
+  padding: 0.62rem 1.2rem;
   text-decoration: none;
   border-radius: var(--radius-sm);
-  transition: background 0.18s, transform 0.18s;
+  transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
   white-space: nowrap;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--brand);
+  box-shadow: 0 1px 2px rgba(29,77,64,0.20);
 }
-.nav-ir:hover { background: #1f1f1f; transform: translateY(-1px); }
+.nav-cta:hover {
+  background: var(--brand-h);
+  border-color: var(--brand-h);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(29,77,64,0.28);
+}
 
-/* Ticker badge — discreto, secundario al CTA */
-.nav-ticker {
-  font-size: 0.68rem;
-  font-weight: 500;
-  color: var(--text-dim);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.28rem 0.6rem;
-  border-radius: 999px;
-  background: transparent;
-  border: 1px solid var(--border);
-  white-space: nowrap;
-  letter-spacing: 0.06em;
-}
-.nav-ticker-dot {
+/* Dropdown submenu — estilo Evernote: panel blanco, sombra suave, en columna */
+.nav-links li.menu-item-has-children { position: relative; }
+.nav-links li.menu-item-has-children > a::after {
+  content: '';
+  display: inline-block;
   width: 6px; height: 6px;
-  background: var(--brand);
-  border-radius: 50%;
-  flex-shrink: 0;
-  animation: pulseBrand 2.5s ease-in-out infinite;
+  margin-left: 0.45rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+  opacity: 0.6;
+  transition: transform 0.18s, opacity 0.18s;
 }
-@media (max-width: 1100px) { .nav-ticker { display: none; } }
+.nav-links li.menu-item-has-children:hover > a::after,
+.nav-links li.menu-item-has-children.is-open > a::after {
+  opacity: 1;
+  transform: rotate(225deg) translateY(-2px);
+}
+.nav-links .sub-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 220px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 0.5rem;
+  list-style: none;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.18s, transform 0.18s, visibility 0.18s;
+  z-index: 5;
+}
+.nav-links li.menu-item-has-children:hover > .sub-menu,
+.nav-links li.menu-item-has-children:focus-within > .sub-menu,
+.nav-links li.menu-item-has-children.is-open > .sub-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.nav-links .sub-menu li a {
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0.55rem 0.85rem;
+  display: block;
+  color: var(--text);
+  border-radius: var(--radius-sm);
+}
+.nav-links .sub-menu li a:hover {
+  background: var(--accent);
+  color: var(--brand);
+}
 
 /* Mobile toggle */
 .nav-toggle {
@@ -457,8 +505,32 @@ p:last-child { margin-bottom: 0; }
 .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.75rem; }
-.two-col   { display: grid; grid-template-columns: 1fr 1fr;     gap: 5rem; align-items: start; }
+.two-col   { display: grid; grid-template-columns: 1fr 1fr;     gap: 5rem; align-items: center; }
 .two-col-r { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 5rem; align-items: start; }
+/* Zigzag alternation — flipea la columna visualmente sin tocar el orden DOM
+   (preserva accesibilidad: el texto sigue primero para screen readers). */
+.two-col.is-flipped > :first-child { order: 2; }
+.two-col.is-flipped > :last-child  { order: 1; }
+
+/* Media holder para ilustraciones en two-col — encuadre Evernote con bordes
+   redondeados, sombra suave y aspect-ratio fijo para mantener ritmo. */
+.two-col-media {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.06),
+    0 24px 48px -20px rgba(0,0,0,0.22),
+    0 14px 28px -16px rgba(0,0,0,0.14);
+  background: var(--bg-alt);
+  aspect-ratio: 4 / 3;
+}
+.two-col-media img,
+.two-col-media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* ── Divider ── */
 .divider {
@@ -568,6 +640,63 @@ section.bg-dark .stat-card .stat-desc { color: var(--on-dark-d); }
 .data-table tbody tr:hover td { background: var(--bg); }
 .data-table tbody td:first-child { color: var(--ink); font-weight: 600; }
 
+/* ── Investor Relations: section heads + capital cards + chart ── */
+.ir-section-head {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--brand);
+  text-transform: uppercase;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border);
+}
+.ir-section-head:first-child { margin-top: 0; }
+
+.capital-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+.cap-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.4rem;
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+}
+.cap-card:hover { border-color: var(--border-2); box-shadow: var(--shadow); transform: translateY(-2px); }
+.cap-val {
+  font-size: clamp(1.5rem, 2.2vw, 1.85rem);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+.cap-lbl {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #070A14;
+  margin-bottom: 1rem;
+}
+.chart-wrap iframe { width: 100%; height: 100%; display: block; border: 0; }
+@media (max-width: 700px) {
+  .chart-wrap { height: 360px; }
+}
+
 /* ── Lists ── */
 .arrow-list { list-style: none; padding: 0; }
 .arrow-list li {
@@ -653,6 +782,42 @@ blockquote p, .callout p {
   flex-shrink: 0;
   width: 2.8rem;
   text-align: right;
+}
+
+/* Iconos de proceso (Cómo funciona) — reemplazan al número grande con un
+   blob orgánico + SVG-stroke. El número queda como label chico arriba para
+   conservar el orden secuencial. */
+.step-icon {
+  width: 64px; height: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: var(--brand);
+  border-radius: 42% 58% 60% 40% / 50% 45% 55% 50%;
+  position: relative;
+  transition: transform 0.4s ease, border-radius 0.6s ease;
+}
+.step-icon svg { width: 30px; height: 30px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.step-icon::before {
+  content: attr(data-step);
+  position: absolute;
+  top: -10px; right: -8px;
+  width: 24px; height: 24px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0;
+}
+.step-card:hover .step-icon {
+  transform: rotate(-4deg) scale(1.04);
+  border-radius: 60% 40% 42% 58% / 45% 55% 45% 55%;
 }
 .step-num {
   font-family: var(--sans);
@@ -806,6 +971,78 @@ blockquote p, .callout p {
   letter-spacing: 0.16em;
 }
 
+/* ── Press Release item (página /news/) ──
+   Cada .pr-item tiene un <a class="pr-link-stretched"> dentro de .pr-title
+   que se expande con ::after para cubrir el item entero — toda la fila es
+   clickeable y abre OTC Markets en pestaña nueva, sin perder semántica. */
+.pr-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1.5rem;
+  padding: 1.6rem 1.85rem;
+  background: var(--bg-card);
+  position: relative;
+  transition: background 0.18s, transform 0.18s;
+}
+.pr-item + .pr-item { border-top: 1px solid var(--border); }
+.pr-item:hover { background: var(--bg-alt); }
+.pr-item:hover .pr-title { color: var(--brand); }
+
+.pr-date-col { padding-top: 0.1rem; }
+.pr-date {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--brand);
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+.pr-title {
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 0.55rem;
+  transition: color 0.18s;
+}
+.pr-body {
+  font-size: 0.94rem;
+  color: var(--text-dim);
+  line-height: 1.65;
+  margin-bottom: 0.75rem;
+}
+.pr-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Stretched link: el <a> dentro de pr-title se expande para cubrir todo el
+   .pr-item. El cursor pointer + hover cubren la card entera, pero el texto
+   del título conserva su color heredado (no aparece subrayado azul). */
+a.pr-link-stretched {
+  color: inherit;
+  text-decoration: none;
+  position: static;
+}
+a.pr-link-stretched::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+a.pr-link-stretched:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -2px;
+}
+
+@media (max-width: 700px) {
+  .pr-item { grid-template-columns: 1fr; gap: 0.6rem; padding: 1.25rem 1.25rem; }
+  .pr-date { letter-spacing: 0.04em; }
+}
+
 /* ── News Card ── */
 .news-card {
   padding: 1.5rem;
@@ -872,13 +1109,26 @@ blockquote p, .callout p {
 .contact-val a { color: var(--brand); text-decoration: none; }
 .contact-val a:hover { text-decoration: underline; }
 
-/* ── Hero (homepage) ── */
+/* ── Hero (homepage) — banda de texto BAJO la imagen banner ──
+   La imagen vive como Image widget con clase .bcii-hero-media.is-banner
+   (ver más arriba). Esta sección es sólo el bloque de texto que sigue. */
 .bcii-hero {
   background: var(--bg-warm);
-  padding: calc(var(--nav-h) + 7rem) 0 7rem;
+  padding: 4rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+.bcii-hero > .container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+.bcii-hero .hero-tag { align-self: center; }
+@media (max-width: 900px) {
+  .bcii-hero { padding: 3rem 0; }
 }
 /* Blobs decorativos de fondo (estilo Evernote) */
 .bcii-hero::before,
@@ -907,7 +1157,7 @@ blockquote p, .callout p {
 .bcii-hero .btns { justify-content: center; margin-bottom: 3rem; }
 
 /* Hero con imagen — variante moderna full-bleed */
-.bcii-hero.has-image { padding: calc(var(--nav-h) + 5rem) 0 5rem; }
+.bcii-hero.has-image { padding: 5rem 0 5rem; }
 .bcii-hero-media {
   margin: 3rem auto 0;
   max-width: 980px;
@@ -920,22 +1170,92 @@ blockquote p, .callout p {
 .bcii-hero-media img,
 .bcii-hero-media picture { display: block; width: 100%; height: auto; }
 
-/* ── Page illustration band (debajo del page-hero en páginas internas) ── */
+/* ── Page illustration band (debajo del page-hero en páginas internas) ──
+   Soporta dos modos de uso:
+   1) Widget Image nativo de Elementor con CSS class "bcii-hero-media reveal"
+      (se reconoce por .elementor-widget-image.bcii-hero-media). Este es
+      el modo recomendado: el cliente cambia la imagen desde el editor
+      Elementor (click sobre la imagen → panel izquierdo).
+   2) <section class="bcii-page-illustration"> con HTML directo (mantenido
+      por compatibilidad con páginas hand-coded). */
+
 .bcii-page-illustration {
   padding: 4rem 0 1rem;
   background: var(--bg);
 }
-.bcii-page-illustration .bcii-hero-media {
-  margin-top: 0;
-  max-width: 1080px;
-  aspect-ratio: 16 / 7;
+
+/* Estilo Evernote (sólo páginas internas, NO home banner). La imagen vive
+ * DENTRO de la section warm cream, junto al texto. Para evitar strip lateral
+ * visible del cream, la imagen se extiende casi hasta el borde del viewport
+ * (1rem de breathing room cada lado) — más ancha que el .container del texto
+ * (que queda a 1120px). El frame visual (radius + sombra + aspect-ratio)
+ * vive en el wrapper interno.
+ *
+ * `:not(.is-banner)` excluye el home banner full-bleed. */
+.bcii-page-illustration .bcii-hero-media,
+.elementor-widget-image.bcii-hero-media:not(.is-banner) {
+  margin: 2.5rem auto 4rem;
+  max-width: 1120px;
+  width: 100%;
+  padding: 0;
+  background: transparent;
 }
+.bcii-page-illustration .bcii-hero-media { margin-top: 0; }
+
+.elementor-widget-image.bcii-hero-media:not(.is-banner) .elementor-widget-container {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.08),
+    0 24px 48px -20px rgba(0,0,0,0.24),
+    0 14px 28px -16px rgba(0,0,0,0.14);
+  aspect-ratio: 16 / 9;
+  background: var(--bg-alt);
+}
+.elementor-widget-image.bcii-hero-media:not(.is-banner) .elementor-image,
+.elementor-widget-image.bcii-hero-media:not(.is-banner) figure,
+.elementor-widget-image.bcii-hero-media:not(.is-banner) a { height: 100%; display: block; margin: 0; }
+.elementor-widget-image.bcii-hero-media:not(.is-banner) img,
 .bcii-page-illustration .bcii-hero-media img {
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%; height: 100%; object-fit: cover; display: block;
 }
+
+/* Banner hero full-width — pegado al nav, edge-to-edge, sin radius ni sombra.
+   Aplica al Image widget de Elementor con clase .bcii-hero-media.is-banner.
+   El widget está fuera del .container y usa toda la ancho del viewport. */
+.elementor-widget-image.bcii-hero-media.is-banner,
+.bcii-hero-media.is-banner {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  max-width: none !important;
+  aspect-ratio: 21 / 9;
+  border-radius: 0 !important;
+  overflow: hidden;
+  box-shadow: none !important;
+  background: var(--bg-alt);
+  position: relative;
+  z-index: 1;
+}
+.elementor-widget-image.bcii-hero-media.is-banner .elementor-widget-container,
+.elementor-widget-image.bcii-hero-media.is-banner .elementor-image,
+.elementor-widget-image.bcii-hero-media.is-banner figure,
+.elementor-widget-image.bcii-hero-media.is-banner a { height: 100%; display: block; margin: 0; padding: 0; }
+.elementor-widget-image.bcii-hero-media.is-banner img,
+.bcii-hero-media.is-banner img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  border-radius: 0 !important;
+}
+@media (max-width: 900px) {
+  .elementor-widget-image.bcii-hero-media.is-banner,
+  .bcii-hero-media.is-banner { aspect-ratio: 4 / 3; }
+}
+
 @media (max-width: 700px) {
   .bcii-page-illustration { padding: 2.5rem 0 0.5rem; }
-  .bcii-page-illustration .bcii-hero-media { aspect-ratio: 4 / 3; }
+  .bcii-page-illustration .bcii-hero-media,
+  .elementor-widget-image.bcii-hero-media:not(.is-banner) { padding: 0; margin-top: 2.5rem; }
+  .elementor-widget-image.bcii-hero-media:not(.is-banner) .elementor-widget-container { aspect-ratio: 4 / 3; }
 }
 
 .hero-tag {
@@ -988,9 +1308,9 @@ blockquote p, .callout p {
 
 /* ── Page Hero (inner pages) ── */
 .page-hero {
-  padding: calc(var(--nav-h) + 5.5rem) 0 5.5rem;
-  background: var(--bg-alt);
-  border-bottom: 1px solid var(--border);
+  padding: calc(var(--nav-h) + 4rem) 0 3rem;   /* ↓ menos bottom — la imagen continúa el flujo */
+  background: var(--bg-warm);                  /* warm cream estilo Evernote */
+  border-bottom: 0;
   position: relative;
 }
 .page-hero-tag {
@@ -1050,25 +1370,26 @@ blockquote p, .callout p {
 
 /* ── Value props icons (estilo Evernote: blob orgánico detrás del símbolo) ── */
 .vp-icon {
-  width: 64px; height: 64px;
+  width: 96px; height: 96px;        /* ↑ tamaño hero — los pilares destacan */
   background: var(--accent);
   color: var(--brand);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.25rem;
-  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
   border-radius: 42% 58% 60% 40% / 50% 45% 55% 50%;   /* blob orgánico */
   position: relative;
   transition: transform 0.4s ease, border-radius 0.6s ease;
+  flex-shrink: 0;
 }
 .panel:hover .vp-icon,
 .vp-icon:hover {
   transform: rotate(-4deg) scale(1.04);
   border-radius: 60% 40% 42% 58% / 45% 55% 45% 55%;
 }
-.vp-icon svg { width: 28px; height: 28px; display: block; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.vp-icon svg { width: 44px; height: 44px; display: block; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .vp-icon.is-warm { background: #fbe8c4; color: #8a5b14; }
 .vp-icon.is-cool { background: #d6ecff; color: #1f4d7a; }
 .vp-icon.is-mint { background: var(--accent); color: var(--brand); }
@@ -1096,14 +1417,19 @@ blockquote p, .callout p {
 .animate-up-d3 { animation: fadeUp 0.7s 0.24s ease-out both; }
 .animate-up-d4 { animation: fadeUp 0.7s 0.32s ease-out both; }
 
-/* Reveal on scroll (IntersectionObserver toggle vía JS — bcii-nav.js) */
-.reveal {
+/* Reveal on scroll (IntersectionObserver toggle vía JS — bcii-nav.js).
+   Excluido del editor Elementor (.elementor-editor-active) y de la preview
+   admin: en esos modos el JS de nav.js no corre, así que la imagen se
+   quedaba en opacity:0 y "desaparecía" al hacer click. */
+body:not(.elementor-editor-active):not(.elementor-preview):not(.wp-admin) .reveal {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.7s ease-out, transform 0.7s ease-out;
   will-change: opacity, transform;
 }
-.reveal.is-visible { opacity: 1; transform: translateY(0); }
+body:not(.elementor-editor-active):not(.elementor-preview):not(.wp-admin) .reveal.is-visible {
+  opacity: 1; transform: translateY(0);
+}
 .reveal[data-delay="1"] { transition-delay: 0.08s; }
 .reveal[data-delay="2"] { transition-delay: 0.16s; }
 .reveal[data-delay="3"] { transition-delay: 0.24s; }
@@ -1168,27 +1494,28 @@ footer.bcii-footer .container { color: var(--on-dark); }
   margin-bottom: 2.5rem;
 }
 .footer-logo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.7rem;
   margin-bottom: 1.1rem;
   text-decoration: none;
+  color: var(--on-dark);
 }
-.footer-logo img { height: 30px; width: auto; display: block; }
 .footer-brand-text .name {
   display: block;
   font-family: var(--sans);
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.15rem;
   color: var(--on-dark);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
+  line-height: 1;
 }
 .footer-brand-text .sub {
   display: block;
-  font-size: 0.62rem;
+  font-size: 0.66rem;
   color: var(--accent);
-  letter-spacing: 0.18em;
-  margin-top: 3px;
+  letter-spacing: 0.22em;
+  margin-top: 4px;
   text-transform: uppercase;
 }
 .footer-desc {
@@ -1307,7 +1634,7 @@ footer.bcii-footer .container { color: var(--on-dark); }
 }
 .person-card:hover { border-color: var(--border-2); transform: translateY(-2px); box-shadow: var(--shadow); }
 .person-avatar {
-  width: 64px; height: 64px;
+  width: 120px; height: 120px;        /* ↑ portraits más prominentes */
   border-radius: 50%;
   background: var(--accent);
   color: var(--brand);
@@ -1315,10 +1642,12 @@ footer.bcii-footer .container { color: var(--on-dark); }
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1.4rem;
   letter-spacing: 0.04em;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   overflow: hidden;
+  border: 3px solid var(--bg-card);
+  box-shadow: 0 0 0 1px var(--border), 0 6px 18px rgba(0,0,0,0.06);
 }
 .person-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .person-role {
@@ -1366,10 +1695,13 @@ footer.bcii-footer .container { color: var(--on-dark); }
   .grid-3 { grid-template-columns: 1fr 1fr; }
   .grid-4 { grid-template-columns: 1fr 1fr; }
   .two-col, .two-col-r { grid-template-columns: 1fr; gap: 3rem; }
+  /* En mobile el zigzag pierde sentido — texto siempre primero para lectura. */
+  .two-col.is-flipped > :first-child,
+  .two-col.is-flipped > :last-child { order: initial; }
+  .two-col-media { aspect-ratio: 16 / 10; }
   section { padding: 5rem 0; }
-  .bcii-hero { padding: calc(var(--nav-h) + 4rem) 0 4rem; }
-  .page-hero { padding: calc(var(--nav-h) + 3rem) 0 3rem; }
-  .nav-ticker { display: none; }
+  .bcii-hero { padding: 3rem 0; }
+  .page-hero { padding: calc(var(--nav-h) + 2rem) 0 2rem; }
 }
 @media (max-width: 700px) {
   .nav-links {
@@ -1381,10 +1713,27 @@ footer.bcii-footer .container { color: var(--on-dark); }
     padding: 1rem;
     border-bottom: 1px solid var(--border);
     box-shadow: var(--shadow);
+    align-items: stretch;
+    gap: 0.25rem;
   }
   .nav-links.open { display: flex; }
   .nav-toggle { display: block; }
-  .nav-ir { display: none; }
+  .nav-cta { display: none; }
+  /* En mobile el sub-menu pasa de dropdown flotante a lista inline indentada */
+  .nav-links li.menu-item-has-children > a::after { display: none; }
+  .nav-links .sub-menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: 0;
+    padding: 0 0 0 0.75rem;
+    margin: 0.25rem 0 0.5rem;
+    min-width: 0;
+    background: transparent;
+  }
+  .nav-links .sub-menu li a { padding: 0.45rem 0.6rem; font-size: 0.85rem; }
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
   .spec-grid { grid-template-columns: 1fr; }
@@ -1419,8 +1768,13 @@ body.bcii .btn.btn-link    { color: var(--brand); }
 body.bcii .bcii-nav .nav-links li a { color: var(--text); }
 body.bcii .bcii-nav .nav-links li a:hover,
 body.bcii .bcii-nav .nav-links li a.active { color: var(--brand); }
-body.bcii .bcii-nav a.nav-ir { color: #ffffff; }
-body.bcii .bcii-nav a.nav-ir:hover { color: #ffffff; }
+body.bcii .bcii-nav a.nav-cta { color: #ffffff; }
+body.bcii .bcii-nav a.nav-cta:hover { color: #ffffff; }
+body.bcii .bcii-nav .sub-menu li a:hover { color: var(--brand); }
+/* El Elementor Kit aplica `.elementor-kit-6 img { border-radius:8px }` con
+ * specificity (0,0,1,1) y se carga DESPUÉS de este CSS — para que el logo
+ * quede con esquinas rectas necesitamos (0,0,2,1)+. */
+body.bcii .nav-logo img { border-radius: 0; }
 
 /* Footer — links + brand text */
 body.bcii .bcii-footer .footer-links a { color: var(--on-dark); }
