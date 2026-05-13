@@ -73,7 +73,7 @@ $year = date( 'Y' );
         </p>
 
         <div class="footer-bottom">
-            <span class="footer-copyright">© <?php echo esc_html( $year ); ?> BCII Enterprises Inc. All rights reserved. Delaware Corporation.</span>
+            <span class="footer-copyright">© <?php echo esc_html( $year ); ?> BCII Enterprises Inc. All rights reserved. Nevada Corporation.</span>
             <span class="footer-copyright">OTC Pink: BCII · CUSIP: 09368L 100 · SIC: 6099</span>
         </div>
     </div>
