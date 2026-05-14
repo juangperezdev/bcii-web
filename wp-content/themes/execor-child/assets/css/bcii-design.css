@@ -1716,7 +1716,9 @@ footer.bcii-footer a { text-decoration: none; }
   .two-col.is-flipped > :last-child { order: initial; }
   .two-col-media { aspect-ratio: 16 / 10; }
   section { padding: 5rem 0; }
-  .bcii-hero { padding: 3rem 0; }
+  /* Home hero: padding-top generoso para que el .hero-tag no quede pegado al
+   * borde inferior del nav fijo cuando el banner pasa al hacer scroll. */
+  .bcii-hero { padding: 5rem 0 3rem; }
   .page-hero { padding: calc(var(--nav-h) + 2rem) 0 2rem; }
 }
 @media (max-width: 700px) {
@@ -1828,4 +1830,137 @@ body.bcii a.news-card .news-title { color: var(--ink); }
 /* Contact card values */
 body.bcii .contact-card .contact-val a { color: var(--brand); }
 body.bcii .contact-card .contact-val a:hover { color: var(--brand-h); }
+
+
+/* ============================================================
+   MOBILE AUDIT PASS — consolidated responsive fixes
+   ──────────────────────────────────────────────────────────
+   Cubre 4 breakpoints adicionales sobre los existentes:
+     ≤1024px  tablet medium
+     ≤768px   tablet small / phablet
+     ≤560px   mobile estándar (iPhone 13/14)
+     ≤390px   mobile chico (iPhone SE / Android compact)
+
+   Filosofía:
+     · Reduce padding lateral progresivamente (40 → 24 → 16 → 12px)
+     · Headings: clamp ya cubre rangos, pero reducir letter-spacing
+       en chico evita colisiones con weight 800
+     · `.btns` con buttons full-width abajo de 560px
+     · Grids fijos (200px minmax, 1fr 1fr explícito) → 1fr en chico
+     · Inline-styles con anchos fijos (200px lbl, 80px val) → fluido
+   ============================================================ */
+
+/* ── ≤1024px — tablet medium ─────────────────────────────── */
+@media (max-width: 1024px) {
+  .container, .container-wide { padding-left: 2rem; padding-right: 2rem; }
+  /* Hero: bajar tipografía y padding antes de mobile breakpoint */
+  body.bcii .bcii-hero h1 { font-size: clamp(2.4rem, 6vw, 3.4rem); }
+}
+
+/* ── ≤768px — phablet / tablet portrait ──────────────────── */
+@media (max-width: 768px) {
+  .container, .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; }
+  /* Section vertical breath */
+  section { padding: 4rem 0; }
+  /* Page hero offset compacto (matchea el nav fijo) */
+  .page-hero { padding: calc(var(--nav-h) + 1.5rem) 0 2rem; }
+  .page-hero .lead { font-size: 0.98rem; }
+  /* Hero facts: explicit 2-col + reset borders de fila */
+  .hero-facts { grid-template-columns: repeat(2, 1fr); }
+  .hero-fact { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 0.75rem; }
+  .hero-fact:nth-child(2n) { border-right: none; }
+  .hero-fact:nth-last-child(-n+2) { border-bottom: none; }
+  /* Two-col-media: ratio más alto para que no quede chato */
+  .two-col-media { aspect-ratio: 16 / 10; }
+  /* Cap cards (IR) — bajar mín para que no haya overflow */
+  .capital-summary { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+  .cap-card { padding: 1.2rem 1.1rem; }
+  /* Stat cards / panels más compactos */
+  .panel, .panel-accent, .panel-tan, .panel-dark { padding: 1.4rem 1.3rem; }
+  /* Step-block (Token page) */
+  .step-block { gap: 1.25rem; }
+  /* Timeline padding-left más chico */
+  .timeline { padding-left: 1.5rem; }
+  /* Footer CTA con menos pad lateral */
+  .footer-cta { padding: 2.4rem 1.75rem; }
+  /* Heading line-height un poco más holgado en small (800 weight es muy compacto) */
+  body.bcii h1, body.bcii h2, body.bcii h3 { line-height: 1.15; }
+}
+
+/* ── ≤560px — mobile estándar ────────────────────────────── */
+@media (max-width: 560px) {
+  .container, .container-wide { padding-left: 1rem; padding-right: 1rem; }
+  section { padding: 3rem 0; }
+  .bcii-hero { padding: 4.5rem 0 2.5rem; }
+  .bcii-hero .lead { font-size: 0.97rem; }
+  /* CTAs: stack full-width — buttons largos no compiten por ancho */
+  .btns { gap: 0.6rem; }
+  .btns > .btn { width: 100%; justify-content: center; }
+  .bcii-hero .btns { flex-direction: column; align-items: stretch; }
+  /* Button padding más compacto */
+  .btn { padding: 0.75rem 1.1rem; font-size: 0.92rem; }
+  /* Heading sizes — limita el clamp inferior para no romper layout */
+  body.bcii h1 { font-size: clamp(1.95rem, 7vw, 2.5rem); letter-spacing: -0.02em; }
+  body.bcii h2 { font-size: clamp(1.55rem, 5.5vw, 2rem); letter-spacing: -0.018em; }
+  body.bcii h3 { font-size: 1.1rem; }
+  /* Hero h1 específicamente */
+  body.bcii .bcii-hero h1, body.bcii .page-hero h1 { font-size: clamp(1.95rem, 7vw, 2.4rem); }
+  /* Hero facts: 1 columna en chico — más legible */
+  .hero-facts { grid-template-columns: 1fr; }
+  .hero-fact { border-right: none; border-bottom: 1px solid var(--border); padding: 0.85rem; }
+  .hero-fact:last-child { border-bottom: none; }
+  /* Spec grid: 1 columna explícita, reset borders */
+  .spec-grid { grid-template-columns: 1fr; }
+  .spec-item { border-right: none !important; padding: 0.95rem 1rem; }
+  .spec-item:last-child { border-bottom: none; }
+  .spec-item:not(:last-child) { border-bottom: 1px solid var(--border); }
+  /* Market bars (thesis page) — el label fijo de 200px y val de 80px se queda
+   * sin espacio en mobile. Stackeamos label arriba y track+val abajo. */
+  .mkt-bar-row { flex-wrap: wrap; gap: 0.4rem 0.75rem; }
+  .mkt-bar-lbl { width: 100%; font-size: 0.78rem; }
+  .mkt-bar-val { width: auto; min-width: 60px; }
+  /* Tables: cell padding más chico, fuente más chica */
+  .data-table { font-size: 0.84rem; }
+  .data-table thead th, .data-table tbody td { padding: 0.7rem 0.85rem; }
+  .comp-table th, .comp-table td, .phase-table th, .phase-table td { padding: 0.6rem 0.7rem; font-size: 0.82rem; }
+  /* News card padding */
+  .news-card { padding: 1.25rem; }
+  /* Cap card */
+  .cap-card { padding: 1rem 0.95rem; }
+  .cap-val { font-size: clamp(1.35rem, 4vw, 1.65rem); }
+  /* Footer CTA: actions stack full-width */
+  .footer-cta { padding: 2rem 1.25rem; margin: -1.25rem 0.75rem 2.5rem; }
+  .footer-cta-text h3 { font-size: 1.2rem; }
+  .footer-cta-actions { width: 100%; flex-direction: column; }
+  .footer-cta-actions > .btn { width: 100%; justify-content: center; }
+  /* Section labels y badges no overflow */
+  .label-row { flex-wrap: wrap; gap: 0.5rem; }
+  .section-label { font-size: 0.7rem; }
+  /* Callout interior más compacto */
+  blockquote, .callout { padding: 1.25rem 1.1rem; }
+  /* IR section-head chico */
+  .ir-section-head { font-size: 0.72rem; margin: 2rem 0 1rem; }
+  /* Chart wrap más bajo (ya estaba 360px — refinamos) */
+  .chart-wrap { height: 320px; }
+}
+
+/* ── ≤390px — iPhone SE / Android compacto ──────────────── */
+@media (max-width: 390px) {
+  .container, .container-wide { padding-left: 0.85rem; padding-right: 0.85rem; }
+  body.bcii h1, body.bcii .bcii-hero h1, body.bcii .page-hero h1 { font-size: 1.85rem; letter-spacing: -0.018em; }
+  body.bcii h2 { font-size: 1.45rem; }
+  .btn { padding: 0.7rem 0.95rem; font-size: 0.88rem; }
+  /* Stat num clamp más chico para que no rebalse */
+  .stat-card .stat-num { font-size: clamp(2rem, 8vw, 2.6rem); }
+  .cap-val { font-size: 1.35rem; }
+  /* Hero ticker / hero-tag pills más compactos */
+  .hero-tag, .page-hero-tag { font-size: 0.72rem; padding: 0.3rem 0.7rem; }
+  /* Footer column heads + brand text */
+  .footer-brand-text .name { font-size: 1.05rem; }
+  .footer-col-head { font-size: 0.78rem; letter-spacing: 0.12em; }
+}
+
+/* ── Safety: ningún elemento gigante rompe el flow horizontal ── */
+img, video, iframe, table { max-width: 100%; }
+.elementor-widget-image img { height: auto; }
 
