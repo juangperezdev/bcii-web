@@ -81,6 +81,25 @@ function execor_child_dequeue_vamtam() {
 }
 
 /* -----------------------------------------------
+   1b3. Dequeue Google Fonts NO usadas que inyecta el Vamtam Elementor Kit:
+   DM Sans, Forum, Nothing You Could Do — la guía de diseño es Inter only.
+   Cada font google es ~5-10 woff2 + un CSS render-blocking en <head>.
+   El Kit registra las fonts en wp_print_styles, así que disparamos tarde.
+----------------------------------------------- */
+add_action( 'wp_print_styles', 'bcii_dequeue_unused_google_fonts', 100 );
+function bcii_dequeue_unused_google_fonts() {
+    if ( is_admin() ) return;
+    foreach ( array(
+        'elementor-gf-dmsans',
+        'elementor-gf-forum',
+        'elementor-gf-nothingyoucoulddo',
+    ) as $h ) {
+        wp_dequeue_style( $h );
+        wp_deregister_style( $h );
+    }
+}
+
+/* -----------------------------------------------
    1c. Quitar wrappers Vamtam que rompen layouts full-bleed
    El parent envuelve cada bloque Gutenberg en .limit-wrapper
    (max-width pequeño) — incompatible con nuestras secciones BCII.

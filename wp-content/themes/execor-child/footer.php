@@ -34,7 +34,7 @@ $year = date( 'Y' );
                     </span>
                 </a>
                 <p class="footer-desc">A blockchain-focused financial technology company headquartered in Vero Beach, Florida. Developing the patent-pending Super Coupon Token platform to transform distribution-list assets into tradeable digital instruments.</p>
-                <span class="footer-ticker-badge">OTC PINK: BCII</span>
+                <span class="footer-ticker-badge">OTC ID: BCII</span>
             </div>
 
             <div>
@@ -74,7 +74,7 @@ $year = date( 'Y' );
 
         <div class="footer-bottom">
             <span class="footer-copyright">© <?php echo esc_html( $year ); ?> BCII Enterprises Inc. All rights reserved. Nevada Corporation.</span>
-            <span class="footer-copyright">OTC Pink: BCII · CUSIP: 09368L 100 · SIC: 6099</span>
+            <span class="footer-copyright">OTC ID: BCII · CUSIP: 09368L 100 · SIC: 6099</span>
         </div>
     </div>
 </footer>
